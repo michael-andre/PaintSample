@@ -7,8 +7,6 @@ import java.awt.*;
  */
 public abstract class Shape implements Drawable {
 
-    public static final int BLACK = 0;
-
     private int mX, mY;
     private Color mColor = Color.WHITE;
 
