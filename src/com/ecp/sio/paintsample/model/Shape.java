@@ -62,8 +62,16 @@ public abstract class Shape implements Drawable {
 
     public abstract double getArea();
 
+    /**
+     * Subclasses must call super before drawing
+     * @param g
+     */
     @Override
-    public void draw(Graphics g) {
+    public final void draw(Graphics g) {
         g.setColor(mColor);
+        doDraw(g);
     }
+
+    protected abstract void doDraw(Graphics g);
+
 }

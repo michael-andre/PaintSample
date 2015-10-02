@@ -37,9 +37,7 @@ public class Circle extends Shape {
     }
 
     @Override
-    public void draw(Graphics g) {
-        super.draw(g);
-
+    protected void doDraw(Graphics g) {
         int size = mRadius * 2;
         g.drawOval(
                 getX(),
@@ -48,4 +46,5 @@ public class Circle extends Shape {
                 size
         );
     }
+
 }

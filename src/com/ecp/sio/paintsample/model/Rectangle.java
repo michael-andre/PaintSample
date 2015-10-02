@@ -61,8 +61,7 @@ public class Rectangle extends Shape {
     }
 
     @Override
-    public void draw(Graphics g) {
-        super.draw(g);
+    protected void doDraw(Graphics g) {
         g.drawRect(
                 getX(),
                 getY(),

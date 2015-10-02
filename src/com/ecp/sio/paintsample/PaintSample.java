@@ -1,16 +1,13 @@
 package com.ecp.sio.paintsample;
 
 import com.ecp.sio.paintsample.model.*;
-import com.ecp.sio.paintsample.model.Point;
 import com.ecp.sio.paintsample.model.Polygon;
 import com.ecp.sio.paintsample.model.Rectangle;
-import com.ecp.sio.paintsample.model.Shape;
 import com.ecp.sio.paintsample.ui.DrawablesPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -32,10 +29,10 @@ public class PaintSample {
         Circle circ1 = new Circle(150, 120, 100);
         circ1.setColor(Color.RED);
 
-        List<Point> points = new ArrayList<>(5);
+        List<Polygon.Point> points = new ArrayList<>(5);
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
-            points.add(new Point(
+            points.add(new Polygon.Point(
                     (int) (random.nextDouble() * 400),
                     (int) (random.nextDouble() * 300)
             ));

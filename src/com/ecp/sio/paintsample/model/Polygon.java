@@ -37,9 +37,7 @@ public class Polygon extends Shape {
     }
 
     @Override
-    public void draw(Graphics g) {
-        super.draw(g);
-
+    protected void doDraw(Graphics g) {
         Point start = mPoints.get(mPoints.size() - 1);
         for (Point end : mPoints) {
             g.drawLine(
@@ -60,5 +58,20 @@ public class Polygon extends Shape {
             y[i] = p.y + getY();
         }
         g.drawPolygon(x, y, size);*/
+    }
+
+    /**
+     * Created by Michaël on 29/09/2015.
+     */
+    public static class Point {
+
+        public int x, y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+
     }
 }
