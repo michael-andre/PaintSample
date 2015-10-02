@@ -1,5 +1,8 @@
 package com.ecp.sio.paintsample.model;
 
+import com.ecp.sio.paintsample.InvalidMetricsException;
+import com.google.gson.JsonObject;
+
 import java.awt.*;
 
 /**
@@ -16,6 +19,11 @@ public abstract class Shape implements Drawable {
     public Shape(int x, int y) {
         this.mX = x;
         this.mY = y;
+    }
+
+    public Shape(JsonObject conf) {
+        this.mX = conf.get("x").getAsInt();
+        this.mY = conf.get("y").getAsInt();
     }
 
     public int getX() {
@@ -67,7 +75,10 @@ public abstract class Shape implements Drawable {
      * @param g
      */
     @Override
-    public final void draw(Graphics g) {
+    public final void draw(Graphics g) throws InvalidMetricsException {
+        if (getArea() == 0) {
+            throw new InvalidMetricsException();
+        }
         g.setColor(mColor);
         doDraw(g);
     }

@@ -2,7 +2,10 @@ package com.ecp.sio.paintsample.ui;
 
 import javax.swing.*;
 import java.awt.Graphics;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import com.ecp.sio.paintsample.InvalidMetricsException;
 import com.ecp.sio.paintsample.model.*;
 
 /**
@@ -21,8 +24,32 @@ public class DrawablesPanel extends JPanel {
         super.paint(g);
 
         for (Drawable drawable : mDrawables) {
-            drawable.draw(g);
+            try {
+                drawable.draw(g);
+            } catch (InvalidMetricsException e) {
+                Logger.getLogger("DrawablesPanel").info("Shape with no area");
+            } catch (Exception e) {
+                Logger.getLogger("DrawablesPanel").log(
+                        Level.SEVERE,
+                        "Failed to draw shape",
+                        e
+                );
+            }
         }
+
+        /*try {
+            for (Drawable drawable : mDrawables) {
+                drawable.draw(g);
+            }
+        } catch (InvalidMetricsException e) {
+            Logger.getLogger("DrawablesPanel").info("Shape with no area");
+        } catch (Exception e) {
+            Logger.getLogger("DrawablesPanel").log(
+                    Level.SEVERE,
+                    "Failed to draw shape",
+                    e
+            );
+        }*/
 
         //Logger.getLogger("DrawablesPanel").info("paint");
     }

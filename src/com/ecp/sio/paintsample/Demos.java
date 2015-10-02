@@ -13,7 +13,7 @@ import java.util.Vector;
  */
 public class Demos {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidMetricsException {
 
         int a = 2;
         float b = 3.2f;

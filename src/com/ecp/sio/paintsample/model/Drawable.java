@@ -1,5 +1,7 @@
 package com.ecp.sio.paintsample.model;
 
+import com.ecp.sio.paintsample.InvalidMetricsException;
+
 import java.awt.*;
 
 /**
@@ -7,6 +9,6 @@ import java.awt.*;
  */
 public interface Drawable {
 
-    void draw(Graphics g);
+    void draw(Graphics g) throws InvalidMetricsException;
 
 }

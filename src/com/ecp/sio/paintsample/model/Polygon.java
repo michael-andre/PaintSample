@@ -1,7 +1,15 @@
 package com.ecp.sio.paintsample.model;
 
+import com.ecp.sio.paintsample.InvalidMetricsException;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Michaël on 29/09/2015.
@@ -13,6 +21,22 @@ public class Polygon extends Shape {
     public Polygon(int x, int y, List<Point> points) {
         super(x, y);
         mPoints = points;
+    }
+
+    public Polygon(JsonObject conf) {
+        super(conf);
+        mPoints = new ArrayList<>();
+        for (JsonElement pointConf : conf.get("points").getAsJsonArray()) {
+            Point point;
+            if (pointConf.isJsonArray()) {
+                point = new Point(pointConf.getAsJsonArray());
+            } else if (pointConf.isJsonObject()) {
+                point = new Point(pointConf.getAsJsonObject());
+            } else {
+                throw new IllegalStateException("Invalid point configuration");
+            }
+            mPoints.add(point);
+        }
     }
 
     @Override
@@ -72,6 +96,15 @@ public class Polygon extends Shape {
             this.y = y;
         }
 
+        public Point(JsonObject conf) {
+            this.x = conf.get("x").getAsInt();
+            this.y = conf.get("y").getAsInt();
+        }
+
+        public Point(JsonArray conf) {
+            this.x = conf.get(0).getAsInt();
+            this.y = conf.get(1).getAsInt();
+        }
 
     }
 }
