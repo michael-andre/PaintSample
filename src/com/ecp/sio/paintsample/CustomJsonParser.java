@@ -7,9 +7,9 @@ import java.lang.reflect.Constructor;
 /**
  * Created by Michaël on 14/10/2015.
  */
-public class CustomJsonParser<T> {
+public class CustomJsonParser {
 
-    public T parse(JsonObject config, String name)
+    public static <T> T parse(JsonObject config, String name)
             throws ReflectiveOperationException {
         /*Class objectClass = Class.forName(name);
         Constructor constructor = objectClass.getConstructor(JsonObject.class);
@@ -19,7 +19,7 @@ public class CustomJsonParser<T> {
         return constructor.newInstance(config);
     }
 
-    public T parse(JsonObject config, Class<T> objectClass)
+    public static <T> T parse(JsonObject config, Class<T> objectClass)
             throws ReflectiveOperationException {
         Constructor<T> constructor = objectClass.getConstructor(JsonObject.class);
         return constructor.newInstance(config);

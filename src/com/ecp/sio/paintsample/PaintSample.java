@@ -3,6 +3,7 @@ package com.ecp.sio.paintsample;
 import com.ecp.sio.paintsample.model.*;
 import com.ecp.sio.paintsample.model.Polygon;
 import com.ecp.sio.paintsample.model.Rectangle;
+import com.ecp.sio.paintsample.model.Shape;
 import com.ecp.sio.paintsample.ui.DrawablesPanel;
 import com.google.gson.*;
 import org.apache.commons.io.IOUtils;
@@ -11,9 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +21,13 @@ import java.util.logging.Logger;
  * Created by Michaël on 21/09/2015.
  */
 public class PaintSample {
+
+    private static final Map<String, Class<? extends Drawable>> SHAPE_CLASSES = new HashMap<>();
+    static {
+        SHAPE_CLASSES.put("circle", Circle.class);
+        SHAPE_CLASSES.put("rectangle", Rectangle.class);
+        SHAPE_CLASSES.put("polygon", Polygon.class);
+    }
 
     public static final String TAG = PaintSample.class.getName();
     public static final Logger LOG = Logger.getLogger(TAG);
@@ -65,7 +72,7 @@ public class PaintSample {
             JsonArray root = new JsonParser().parse(json).getAsJsonArray();
             for (JsonElement e : root) {
                 JsonObject obj = e.getAsJsonObject();
-                String type = obj.get("type").getAsString();
+                /*String type = obj.get("type").getAsString();
                 switch (type) {
                     case "circle":
                         Circle circle = new CustomJsonParser<Circle>()
@@ -83,6 +90,10 @@ public class PaintSample {
                     default:
                         //throw new IllegalStateException("Unknown shape");
                         LOG.warning("Unknown shape");
+                }*/
+                Class<? extends Drawable> objectClass = SHAPE_CLASSES.get(obj.get("type").getAsString());
+                if (objectClass != null) {
+                    shapes.add(CustomJsonParser.parse(obj, objectClass));
                 }
             }
         } catch (ReflectiveOperationException e) {
