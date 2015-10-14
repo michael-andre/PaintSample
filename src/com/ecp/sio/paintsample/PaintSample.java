@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -60,24 +61,32 @@ public class PaintSample {
 
         List<Drawable> shapes = new ArrayList<>();
 
-        JsonArray root = new JsonParser().parse(json).getAsJsonArray();
-        for (JsonElement e : root) {
-            JsonObject obj = e.getAsJsonObject();
-            String type = obj.get("type").getAsString();
-            switch (type) {
-                case "circle":
-                    shapes.add(new Circle(obj));
-                    break;
-                case "rectangle":
-                    shapes.add(new Rectangle(obj));
-                    break;
-                case "polygon":
-                    shapes.add(new Polygon(obj));
-                    break;
-                default:
-                    //throw new IllegalStateException("Unknown shape");
-                    LOG.warning("Unknown shape");
+        try {
+            JsonArray root = new JsonParser().parse(json).getAsJsonArray();
+            for (JsonElement e : root) {
+                JsonObject obj = e.getAsJsonObject();
+                String type = obj.get("type").getAsString();
+                switch (type) {
+                    case "circle":
+                        Circle circle = new CustomJsonParser<Circle>()
+                                .parse(obj, Circle.class);
+                        shapes.add(circle);
+                        break;
+                    case "rectangle":
+                        Rectangle rectangle = new CustomJsonParser<Rectangle>()
+                                .parse(obj, Rectangle.class.getName());
+                        shapes.add(rectangle);
+                        break;
+                    case "polygon":
+                        shapes.add(new Polygon(obj));
+                        break;
+                    default:
+                        //throw new IllegalStateException("Unknown shape");
+                        LOG.warning("Unknown shape");
+                }
             }
+        } catch (ReflectiveOperationException e) {
+            LOG.log(Level.SEVERE, "Reflection error", e);
         }
 
         JFrame window = new JFrame("Photoshop");

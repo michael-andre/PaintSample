@@ -4,6 +4,7 @@ import com.ecp.sio.paintsample.InvalidMetricsException;
 import com.google.gson.JsonObject;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Michaël on 28/09/2015.
@@ -24,6 +25,9 @@ public abstract class Shape implements Drawable {
     public Shape(JsonObject conf) {
         this.mX = conf.get("x").getAsInt();
         this.mY = conf.get("y").getAsInt();
+        if (conf.has("color")) {
+            this.mColor = Color.decode(conf.get("color").getAsString());
+        }
     }
 
     public int getX() {
