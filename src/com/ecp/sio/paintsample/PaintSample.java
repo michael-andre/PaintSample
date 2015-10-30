@@ -37,28 +37,31 @@ public class PaintSample {
         // Get the JSON definition from URL
         String json = null;
         try {
-            URL url = new URL("http://pastebin.com/raw.php?i=dzf3A5gp");
+            URL url = new URL("http://pastebin.com/raw.php?i=3h37X9Ag");
             // json = getJsonNative(url);
             json = IOUtils.toString(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.log(Level.SEVERE, "Failed to download JSON", e);
         }
 
         // Convert string to object model
         List<Drawable> drawables;
         //drawables = getStaticShapes();
         drawables = parseJsonCustom(json);
+        //Gson gson = new Gson();
+        //drawables = gson.fromJson(json, new ArrayList<Drawable>().getClass());
 
         // Create a window
         JFrame window = new JFrame("Photoshop");
         window.setSize(640, 480);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        window.setVisible(true);
 
         // Add a panel to the window
         JPanel panel = new DrawablesPanel(drawables);
         panel.setBackground(Color.DARK_GRAY);
         window.add(panel);
+
+        window.setVisible(true);
     }
 
     private static String getJsonNative(URL url) throws IOException {
