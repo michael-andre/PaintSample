@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -35,70 +36,19 @@ public class PaintSample {
     // Single line comment
     public static void main(String[] args) {
 
-        /*try {
-            URL url = new URL("http://pastebin.com/raw.php?i=dzf3A5gp");
-            //BufferedInputStream in = new BufferedInputStream(url.openStream());
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(
-                            url.openStream()
-                    )
-            );
-            StringBuilder response = new StringBuilder();
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-
-            in.close();
-            json = response.toString();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
+        // Get the JSON definition from URL
         String json = null;
         try {
-            URL url = new URL("http://pastebin.com/raw.php?i=3h37X9Ag");
+            URL url = new URL("http://pastebin.com/raw.php?i=dzf3A5gp");
+            // json = getJsonNative(url);
             json = IOUtils.toString(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        List<Drawable> shapes = new ArrayList<>();
-
-        try {
-            JsonArray root = new JsonParser().parse(json).getAsJsonArray();
-            for (JsonElement e : root) {
-                JsonObject obj = e.getAsJsonObject();
-                /*String type = obj.get("type").getAsString();
-                switch (type) {
-                    case "circle":
-                        Circle circle = new CustomJsonParser<Circle>()
-                                .parse(obj, Circle.class);
-                        shapes.add(circle);
-                        break;
-                    case "rectangle":
-                        Rectangle rectangle = new CustomJsonParser<Rectangle>()
-                                .parse(obj, Rectangle.class.getName());
-                        shapes.add(rectangle);
-                        break;
-                    case "polygon":
-                        shapes.add(new Polygon(obj));
-                        break;
-                    default:
-                        //throw new IllegalStateException("Unknown shape");
-                        LOG.warning("Unknown shape");
-                }*/
-                Class<? extends Drawable> objectClass = SHAPE_CLASSES.get(obj.get("type").getAsString());
-                if (objectClass != null) {
-                    shapes.add(CustomJsonParser.parse(obj, objectClass));
-                }
-            }
-        } catch (ReflectiveOperationException e) {
-            LOG.log(Level.SEVERE, "Reflection error", e);
-        }
+        // Convert string to object model
+        List<Drawable> drawables;
+        drawables = parseShapesCustom(json);
 
         JFrame window = new JFrame("Photoshop");
         window.setSize(640, 480);
@@ -137,5 +87,57 @@ public class PaintSample {
 
     }
 
+    private static String getJsonNative(URL url) throws IOException {
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        url.openStream()
+                )
+        );
+        StringBuilder response = new StringBuilder();
+
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+
+        in.close();
+        return response.toString();
+    }
+
+    private static List<Drawable> parseShapesCustom(String json) {
+        List<Drawable> shapes = new ArrayList<>();
+        try {
+            JsonArray root = new JsonParser().parse(json).getAsJsonArray();
+            for (JsonElement e : root) {
+                JsonObject obj = e.getAsJsonObject();
+                /*String type = obj.get("type").getAsString();
+                switch (type) {
+                    case "circle":
+                        Circle circle = new CustomJsonParser<Circle>()
+                                .parse(obj, Circle.class);
+                        shapes.add(circle);
+                        break;
+                    case "rectangle":
+                        Rectangle rectangle = new CustomJsonParser<Rectangle>()
+                                .parse(obj, Rectangle.class.getName());
+                        shapes.add(rectangle);
+                        break;
+                    case "polygon":
+                        shapes.add(new Polygon(obj));
+                        break;
+                    default:
+                        //throw new IllegalStateException("Unknown shape");
+                        LOG.warning("Unknown shape");
+                }*/
+                Class<? extends Drawable> objectClass = SHAPE_CLASSES.get(obj.get("type").getAsString());
+                if (objectClass != null) {
+                    shapes.add(CustomJsonParser.parse(obj, objectClass));
+                }
+            }
+        } catch (ReflectiveOperationException e) {
+            LOG.log(Level.SEVERE, "Reflection error", e);
+        }
+        return shapes;
+    }
 
 }
