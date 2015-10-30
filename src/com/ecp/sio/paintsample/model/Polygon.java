@@ -1,6 +1,5 @@
 package com.ecp.sio.paintsample.model;
 
-import com.ecp.sio.paintsample.InvalidMetricsException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,24 +7,22 @@ import com.google.gson.JsonObject;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by Michaël on 29/09/2015.
  */
 public class Polygon extends Shape {
 
-    private List<Point> mPoints;
+    private List<Point> points;
 
     public Polygon(int x, int y, List<Point> points) {
         super(x, y);
-        mPoints = points;
+        this.points = points;
     }
 
     public Polygon(JsonObject conf) {
         super(conf);
-        mPoints = new ArrayList<>();
+        points = new ArrayList<>();
         for (JsonElement pointConf : conf.get("points").getAsJsonArray()) {
             Point point;
             if (pointConf.isJsonArray()) {
@@ -35,7 +32,7 @@ public class Polygon extends Shape {
             } else {
                 throw new IllegalStateException("Invalid point configuration");
             }
-            mPoints.add(point);
+            points.add(point);
         }
     }
 
@@ -46,12 +43,12 @@ public class Polygon extends Shape {
         int yMin = Integer.MAX_VALUE;
         int yMax = Integer.MIN_VALUE;
         /*
-        xMin = mPoints.get(0).x;
+        xMin = points.get(0).x;
         xMax = xMin;
-        yMin = mPoints.get(0).y;
+        yMin = points.get(0).y;
         yMax = yMin;
         */
-        for (Point p : mPoints) {
+        for (Point p : points) {
             xMin = Math.min(xMin, p.x);
             yMin = Math.min(yMin, p.y);
             xMax = Math.max(xMax, p.x);
@@ -62,8 +59,8 @@ public class Polygon extends Shape {
 
     @Override
     protected void doDraw(Graphics g) {
-        Point start = mPoints.get(mPoints.size() - 1);
-        for (Point end : mPoints) {
+        Point start = points.get(points.size() - 1);
+        for (Point end : points) {
             g.drawLine(
                     start.x + getX(),
                     start.y + getY(),
@@ -73,11 +70,11 @@ public class Polygon extends Shape {
             start = end;
         }
 
-        /*int size = mPoints.size();
+        /*int size = points.size();
         int[] x = new int[size];
         int[] y = new int[size];
         for (int i = 0; i < size; i++) {
-            Point p = mPoints.get(i);
+            Point p = points.get(i);
             x[i] = p.x + getX();
             y[i] = p.y + getY();
         }

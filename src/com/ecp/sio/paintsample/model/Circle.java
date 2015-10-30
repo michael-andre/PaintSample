@@ -1,6 +1,5 @@
 package com.ecp.sio.paintsample.model;
 
-import com.ecp.sio.paintsample.InvalidMetricsException;
 import com.google.gson.JsonObject;
 
 import java.awt.*;
@@ -10,29 +9,29 @@ import java.awt.*;
  */
 public class Circle extends Shape {
 
-    private int mRadius;
+    private int radius;
 
     public Circle(int x, int y, int radius) {
         super(x, y);
-        this.mRadius = radius;
+        this.radius = radius;
     }
 
     public Circle(JsonObject conf) {
         super(conf);
-        this.mRadius = conf.get("radius").getAsInt();
+        this.radius = conf.get("radius").getAsInt();
     }
 
     public int getRadius() {
-        return mRadius;
+        return radius;
     }
 
     public void setRadius(int radius) {
-        this.mRadius = radius;
+        this.radius = radius;
     }
 
     @Override
     public double getArea() {
-        return Math.pow(mRadius, 2) * Math.PI;
+        return Math.pow(radius, 2) * Math.PI;
     }
 
     @Override
@@ -40,13 +39,13 @@ public class Circle extends Shape {
         return "Circle {" +
                 "x=" + getX() +
                 ", y=" + getY() +
-                ", radius=" + mRadius +
+                ", radius=" + radius +
                 '}';
     }
 
     @Override
     protected void doDraw(Graphics g) {
-        int size = mRadius * 2;
+        int size = radius * 2;
         g.drawOval(
                 getX(),
                 getY(),

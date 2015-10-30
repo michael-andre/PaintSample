@@ -4,61 +4,60 @@ import com.ecp.sio.paintsample.InvalidMetricsException;
 import com.google.gson.JsonObject;
 
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Michaël on 28/09/2015.
  */
 public abstract class Shape implements Drawable {
 
-    private int mX, mY;
-    private Color mColor = Color.WHITE;
+    private int x, y;
+    private Color color;
 
     /*public Shape() {
     }*/
 
     public Shape(int x, int y) {
-        this.mX = x;
-        this.mY = y;
+        this.x = x;
+        this.y = y;
     }
 
     public Shape(JsonObject conf) {
-        this.mX = conf.get("x").getAsInt();
-        this.mY = conf.get("y").getAsInt();
+        this.x = conf.get("x").getAsInt();
+        this.y = conf.get("y").getAsInt();
         if (conf.has("color")) {
-            this.mColor = Color.decode(conf.get("color").getAsString());
+            this.color = Color.decode(conf.get("color").getAsString());
         }
     }
 
     public int getX() {
-        return mX;
+        return x;
     }
 
     public void setX(int x) {
-        this.mX = x;
+        this.x = x;
     }
 
     public int getY() {
-        return mY;
+        return y;
     }
 
     public void setY(int y) {
-        this.mY = y;
+        this.y = y;
     }
 
     public Color getColor() {
-        return mColor;
+        return color;
     }
 
     public void setColor(Color color) {
-        this.mColor = color;
+        this.color = color;
     }
 
     @Override
     public String toString() {
         return "Shape {" +
-                "x=" + mX +
-                ", y=" + mY +
+                "x=" + x +
+                ", y=" + y +
                 '}';
     }
 
@@ -66,7 +65,7 @@ public abstract class Shape implements Drawable {
      public boolean equals(Object obj) {
         if (obj instanceof Shape) {
             Shape shape = ((Shape) obj);
-            return shape.mX == mX && shape.mY == mY;
+            return shape.x == x && shape.y == y;
         } else {
             return false;
         }
@@ -83,7 +82,8 @@ public abstract class Shape implements Drawable {
         if (getArea() == 0) {
             throw new InvalidMetricsException();
         }
-        g.setColor(mColor);
+        if (color != null) g.setColor(color);
+        else g.setColor(Color.WHITE);
         doDraw(g);
     }
 

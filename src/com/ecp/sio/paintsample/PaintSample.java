@@ -1,10 +1,14 @@
 package com.ecp.sio.paintsample;
 
+import com.ecp.sio.paintsample.gson.ColorDeserializer;
+import com.ecp.sio.paintsample.gson.DrawableDeserializer;
+import com.ecp.sio.paintsample.gson.PointDeserializer;
 import com.ecp.sio.paintsample.model.*;
 import com.ecp.sio.paintsample.model.Polygon;
 import com.ecp.sio.paintsample.model.Rectangle;
 import com.ecp.sio.paintsample.ui.DrawablesPanel;
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
@@ -47,9 +51,13 @@ public class PaintSample {
         // Convert string to object model
         List<Drawable> drawables;
         //drawables = getStaticShapes();
-        drawables = parseJsonCustom(json);
-        //Gson gson = new Gson();
-        //drawables = gson.fromJson(json, new ArrayList<Drawable>().getClass());
+        //drawables = parseJsonCustom(json);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Drawable.class, new DrawableDeserializer())
+                .registerTypeAdapter(Color.class, new ColorDeserializer())
+                .registerTypeAdapter(Polygon.Point.class, new PointDeserializer())
+                .create();
+        drawables = gson.fromJson(json, new TypeToken<List<Drawable>>(){}.getType());
 
         // Create a window
         JFrame window = new JFrame("Photoshop");
