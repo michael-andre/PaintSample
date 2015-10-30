@@ -3,7 +3,6 @@ package com.ecp.sio.paintsample;
 import com.ecp.sio.paintsample.model.*;
 import com.ecp.sio.paintsample.model.Polygon;
 import com.ecp.sio.paintsample.model.Rectangle;
-import com.ecp.sio.paintsample.model.Shape;
 import com.ecp.sio.paintsample.ui.DrawablesPanel;
 import com.google.gson.*;
 import org.apache.commons.io.IOUtils;
@@ -11,7 +10,6 @@ import org.apache.commons.io.IOUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -48,63 +46,47 @@ public class PaintSample {
 
         // Convert string to object model
         List<Drawable> drawables;
-        drawables = parseShapesCustom(json);
+        //drawables = getStaticShapes();
+        drawables = parseJsonCustom(json);
 
+        // Create a window
         JFrame window = new JFrame("Photoshop");
         window.setSize(640, 480);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        /*Rectangle rect1 = new Rectangle(10, 20, 50, 100);
-        rect1.setColor(Color.GREEN);
-        Circle circ1 = new Circle(150, 120, 100);
-        circ1.setColor(Color.RED);
-
-        List<Polygon.Point> points = new ArrayList<>(5);
-        Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            points.add(new Polygon.Point(
-                    (int) (random.nextDouble() * 400),
-                    (int) (random.nextDouble() * 300)
-            ));
-        }
-        //Polygon poly1 = new Polygon(30, 40, points);
-        Polygon poly1 = new Polygon(30, 40, null);*/
-
-
-        /*shapes.add(circ1);
-        shapes.add(rect1);
-        shapes.add(poly1);*/
-
-        JPanel panel = new DrawablesPanel(shapes);
-        panel.setBackground(Color.DARK_GRAY);
-        window.add(panel);
-
-        /*while (true) {
-
-        }*/
-
         window.setVisible(true);
 
+        // Add a panel to the window
+        JPanel panel = new DrawablesPanel(drawables);
+        panel.setBackground(Color.DARK_GRAY);
+        window.add(panel);
     }
 
     private static String getJsonNative(URL url) throws IOException {
+        // URL.openStream() establish a connection to the URL ("open a pipe")
+        // InputStreamReader prepares the reading on the above stream
+        // BufferedReader wraps InputStreamReader adding the buffering capability
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(
                         url.openStream()
                 )
         );
+        // StringBuilder will receive the lines and concatenate in a more efficient way than "+"
         StringBuilder response = new StringBuilder();
 
+        // Until now, nothing has been read!
+        // Here we loop: the single line inside the while reads a line and checks if the end of the stream is reached
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
 
+        // Always close streams after reading...
         in.close();
+
         return response.toString();
     }
 
-    private static List<Drawable> parseShapesCustom(String json) {
+    private static List<Drawable> parseJsonCustom(String json) {
         List<Drawable> shapes = new ArrayList<>();
         try {
             JsonArray root = new JsonParser().parse(json).getAsJsonArray();
@@ -137,6 +119,31 @@ public class PaintSample {
         } catch (ReflectiveOperationException e) {
             LOG.log(Level.SEVERE, "Reflection error", e);
         }
+        return shapes;
+    }
+
+    private static List<Drawable> getStaticShapes() {
+        List<Drawable> shapes = new ArrayList<>();
+
+        Rectangle rect1 = new Rectangle(10, 20, 50, 100);
+        rect1.setColor(Color.GREEN);
+        Circle circ1 = new Circle(150, 120, 100);
+        circ1.setColor(Color.RED);
+
+        List<Polygon.Point> points = new ArrayList<>(5);
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            points.add(new Polygon.Point(
+                    (int) (random.nextDouble() * 400),
+                    (int) (random.nextDouble() * 300)
+            ));
+        }
+        Polygon poly1 = new Polygon(30, 40, points);
+
+        shapes.add(circ1);
+        shapes.add(rect1);
+        shapes.add(poly1);
+
         return shapes;
     }
 
