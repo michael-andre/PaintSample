@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import java.awt.*;
 
 /**
- * Created by Michaël on 28/09/2015.
+ * A model class for a circle
  */
 public class Circle extends Shape {
 

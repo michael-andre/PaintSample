@@ -1,12 +1,11 @@
 package com.ecp.sio.paintsample.model;
 
-import com.ecp.sio.paintsample.InvalidMetricsException;
 import com.google.gson.JsonObject;
 
 import java.awt.*;
 
 /**
- * Created by Michaël on 21/09/2015.
+ * A model class for a rectangle
  */
 public class Rectangle extends Shape {
 
@@ -21,6 +20,10 @@ public class Rectangle extends Shape {
         this.height = height;
     }
 
+    /**
+     * This constructor is for our CustomJsonParser
+     * @param conf The JSON configuration
+     */
     public Rectangle(JsonObject conf) {
         super(conf);
         this.width = conf.get("width").getAsInt();

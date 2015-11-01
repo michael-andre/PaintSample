@@ -6,14 +6,13 @@ import com.ecp.sio.paintsample.model.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
- * Created by Michaël on 29/09/2015.
+ * Some very basic java language demos
  */
 public class Demos {
 
-    public static void main(String[] args) throws InvalidMetricsException {
+    public static void main(String[] args) {
 
         int a = 2;
         float b = 3.2f;
@@ -39,25 +38,20 @@ public class Demos {
             System.out.println("Loop " + i);
         }
 
-
         a = Math.round(b);
 
         System.out.println(a);
 
         Rectangle rect1 = new Rectangle(10, 20, 200, 100);
-        //System.out.println(rect1.toString());
         Rectangle rect2 = new Rectangle(10, 20, 200, 100);
         Rectangle rect3 = rect1;
-        //System.out.println(rect2.toString());
 
         Shape shape = new Rectangle(10, 20, 200, 100);
         System.out.println(shape.getArea());
 
         boolean test = rect1.equals(rect2);
-        //System.out.println(test);
 
         Circle circ1 = new Circle(150, 120, 100);
-        //System.out.println(circ1.toString());
 
         int[] table1 = new int[3];
         int[] table2 = new int[] { 1, 2, 3 };

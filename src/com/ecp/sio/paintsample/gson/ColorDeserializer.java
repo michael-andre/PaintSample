@@ -9,7 +9,7 @@ import java.awt.*;
 import java.lang.reflect.Type;
 
 /**
- * Created by Michaël on 30/10/2015.
+ * A deserializer to help the Gson library to decode fields of type java.awt.Color
  */
 public class ColorDeserializer implements JsonDeserializer<Color> {
 
